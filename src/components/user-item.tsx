@@ -1,10 +1,10 @@
 "use client";
 
 import { upvoteUser } from "@/data-layer/users";
-import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { useActionState, useTransition } from "react";
+import { useActionState } from "react";
 import { LoaderCircle } from "lucide-react";
+import { toastCallbacks, withCallbacks } from "@/lib/utils";
 
 type UserItemProps = {
   user: {
@@ -37,7 +37,10 @@ const UserItem = ({ user }: UserItemProps) => {
   //   });
   // };
 
-  const [, upvoteAction, upvotePending] = useActionState(upvoteUser, null);
+  const [, upvoteAction, upvotePending] = useActionState(
+    withCallbacks(upvoteUser, toastCallbacks),
+    null
+  );
 
   return (
     <div className="flex items-center space-x-6 p-6">
