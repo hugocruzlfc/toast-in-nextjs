@@ -1,9 +1,9 @@
 "use client";
 
-import { upvoteUser } from "@/features/users/user-dao";
+import { upvoteUser } from "@/data-layer/users";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { useTransition } from "react";
+import { useActionState, useTransition } from "react";
 import { LoaderCircle } from "lucide-react";
 
 type UserItemProps = {
@@ -15,27 +15,29 @@ type UserItemProps = {
 };
 
 const UserItem = ({ user }: UserItemProps) => {
-  const [isPending, startTransition] = useTransition();
+  // const [isPending, startTransition] = useTransition();
 
-  const upvoteAction = async (formData: FormData) => {
-    startTransition(async () => {
-      const promise = upvoteUser(formData);
+  // const upvoteAction = async (formData: FormData) => {
+  //   startTransition(async () => {
+  //     const promise = upvoteUser(formData);
 
-      toast.promise(promise, {
-        loading: "Upvoting ...",
-        success: (result) => {
-          if (result.message && result.status === "SUCCESS") {
-            return result.message;
-          }
-        },
-        error: (result) => {
-          if (result.message && result.status === "ERROR") {
-            return result.message;
-          }
-        },
-      });
-    });
-  };
+  //     toast.promise(promise, {
+  //       loading: "Upvoting ...",
+  //       success: (result) => {
+  //         if (result.message && result.status === "SUCCESS") {
+  //           return result.message;
+  //         }
+  //       },
+  //       error: (result) => {
+  //         if (result.message && result.status === "ERROR") {
+  //           return result.message;
+  //         }
+  //       },
+  //     });
+  //   });
+  // };
+
+  const [, upvoteAction, upvotePending] = useActionState(upvoteUser, null);
 
   return (
     <div className="flex items-center space-x-6 p-6">
@@ -54,7 +56,8 @@ const UserItem = ({ user }: UserItemProps) => {
           value={user.id}
         />
         <Button type="submit">
-          {isPending ? (
+          {/* {isPending ? ( */}
+          {upvotePending ? (
             <p className="flex items-center space-x-2">
               <LoaderCircle className="animate-spin" />
               <span>Upvoting ...</span>

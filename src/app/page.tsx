@@ -1,4 +1,4 @@
-import { getUsers } from "@/features/users/user-dao";
+import { getUsers } from "@/data-layer/users";
 import { UserItem } from "@/components/user-item";
 
 export default async function Home() {
