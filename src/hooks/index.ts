@@ -1,4 +1,4 @@
-import { downvoteUser, upvoteUser } from "@/data-layer/users";
+import { deleteUser, downvoteUser, upvoteUser } from "@/data-layer/users";
 import { withCallbacks, createToastCallbacks } from "@/lib/utils";
 import { useActionState } from "react";
 
@@ -20,6 +20,18 @@ export const useUpvoteUser = () => {
       upvoteUser,
       createToastCallbacks({
         loadingMessage: "Upvoting ...",
+      })
+    ),
+    null
+  );
+};
+
+export const useDeleteUser = () => {
+  return useActionState(
+    withCallbacks(
+      deleteUser,
+      createToastCallbacks({
+        loadingMessage: "Deleting ...",
       })
     ),
     null

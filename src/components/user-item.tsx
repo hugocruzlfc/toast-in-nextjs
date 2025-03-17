@@ -1,11 +1,8 @@
 "use client";
 
-import { upvoteUser } from "@/data-layer/users";
 import { Button } from "@/components/ui/button";
-import { useActionState } from "react";
 import { LoaderCircle } from "lucide-react";
-import { createToastCallbacks, withCallbacks } from "@/lib/utils";
-import { useDownvoteUser, useUpvoteUser } from "@/hooks";
+import { useDeleteUser, useDownvoteUser, useUpvoteUser } from "@/hooks";
 
 type UserItemProps = {
   user: {
@@ -40,6 +37,7 @@ const UserItem = ({ user }: UserItemProps) => {
 
   const [, upvoteAction, upvotePending] = useUpvoteUser();
   const [, downvoteAction, downvotePending] = useDownvoteUser();
+  const [, deleteAction, deletePending] = useDeleteUser();
 
   return (
     <div className="flex items-center space-x-6 p-6">
@@ -90,6 +88,30 @@ const UserItem = ({ user }: UserItemProps) => {
             </p>
           ) : (
             "Downvote"
+          )}
+        </Button>
+      </form>
+      <form
+        action={deleteAction}
+        className="space-y-6"
+      >
+        <input
+          type="hidden"
+          name="userId"
+          value={user.id}
+        />
+        <Button
+          type="submit"
+          variant="outline"
+          disabled={deletePending}
+        >
+          {deletePending ? (
+            <p className="flex items-center space-x-2">
+              <LoaderCircle className="animate-spin" />
+              <span>Deleting ...</span>
+            </p>
+          ) : (
+            "Delete"
           )}
         </Button>
       </form>

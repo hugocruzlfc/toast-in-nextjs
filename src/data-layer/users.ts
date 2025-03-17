@@ -49,7 +49,7 @@ const toActionState = (
 };
 
 export const upvoteUser = async (
-  actionState: ActionState,
+  _actionState: ActionState,
   formData: FormData
 ) => {
   await new Promise((resolve) => setTimeout(resolve, 250));
@@ -73,4 +73,24 @@ export const downvoteUser = async (): Promise<ActionState> => {
 
   // force error for debugging purposes
   return toActionState("Something went wrong", "ERROR");
+};
+
+export const deleteUser = async (
+  _actionState: ActionState,
+  formData: FormData
+): Promise<ActionState> => {
+  await new Promise((resolve) => setTimeout(resolve, 250));
+
+  const userId = formData.get("userId");
+
+  const index = users.findIndex((user) => user.id === userId);
+  if (index === -1) {
+    return toActionState("User not found", "ERROR");
+  }
+
+  users.splice(index, 1);
+
+  revalidatePath("/");
+
+  return toActionState("User deleted", "SUCCESS");
 };
