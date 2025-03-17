@@ -4,7 +4,8 @@ import { upvoteUser } from "@/data-layer/users";
 import { Button } from "@/components/ui/button";
 import { useActionState } from "react";
 import { LoaderCircle } from "lucide-react";
-import { toastCallbacks, withCallbacks } from "@/lib/utils";
+import { createToastCallbacks, withCallbacks } from "@/lib/utils";
+import { useDownvoteUser, useUpvoteUser } from "@/hooks";
 
 type UserItemProps = {
   user: {
@@ -37,10 +38,8 @@ const UserItem = ({ user }: UserItemProps) => {
   //   });
   // };
 
-  const [, upvoteAction, upvotePending] = useActionState(
-    withCallbacks(upvoteUser, toastCallbacks),
-    null
-  );
+  const [, upvoteAction, upvotePending] = useUpvoteUser();
+  const [, downvoteAction, downvotePending] = useDownvoteUser();
 
   return (
     <div className="flex items-center space-x-6 p-6">
@@ -51,7 +50,7 @@ const UserItem = ({ user }: UserItemProps) => {
 
       <form
         action={upvoteAction}
-        className="w-2/3 space-y-6"
+        className="space-y-6"
       >
         <input
           type="hidden"
@@ -67,6 +66,30 @@ const UserItem = ({ user }: UserItemProps) => {
             </p>
           ) : (
             "Upvote"
+          )}
+        </Button>
+      </form>
+
+      <form
+        action={downvoteAction}
+        className="space-y-6"
+      >
+        <input
+          type="hidden"
+          name="userId"
+          value={user.id}
+        />
+        <Button
+          type="submit"
+          variant="destructive"
+        >
+          {downvotePending ? (
+            <p className="flex items-center space-x-2">
+              <LoaderCircle className="animate-spin" />
+              <span>Downvoting ...</span>
+            </p>
+          ) : (
+            "Downvote"
           )}
         </Button>
       </form>

@@ -67,3 +67,10 @@ export const upvoteUser = async (
 
   return toActionState("User upvoted", "SUCCESS");
 };
+
+export const downvoteUser = async (): Promise<ActionState> => {
+  await new Promise((resolve) => setTimeout(resolve, 250));
+
+  // force error for debugging purposes
+  return toActionState("Something went wrong", "ERROR");
+};
